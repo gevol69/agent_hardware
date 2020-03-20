@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+<form name="get_info">
+    <p><input type="button" style="width:300Px;height:25Px" name="ipaddress_all" value="IP адреса со всех интерфейсов" /></p>
+    <p><input type="button" style="width:300Px;height:25Px" name="ipaddress_default" value="IP адрес шлюза по умолчанию" /></p>
+    <p><input type="button" style="width:300Px;height:25Px" name="route_table" value="Таблица маршрутизации" /></p>
+    <p><input type="button" style="width:300Px;height:25Px" name="mac_all" value="MAC адреса со всех интерфейсов" /></p>
+    <p><input type="button" style="width:300Px;height:25Px" name="mac_default" value="MAC адрес интерфейса по умолчанию" /></p>
+    <p><input type="button" style="width:300Px;height:25Px" name="mac_nearest_gateways" value="MAC адреса ближайших шлюзов" /></p>
+    <p><input type="button" style="width:300Px;height:25Px" name="disk_serial" value="Серийный номер винчестера" /></p>
+    <p><input type="button" style="width:300Px;height:25Px" name="os_info" value="Наименование и версия ОС" /></p>
+    <p><input type="button" style="width:300Px;height:25Px" name="cpu_info" value="Имя процессора" /></p>
+    <p><input type="button" style="width:300Px;height:25Px" name="motherboard_info" value="Материнская плата" /></p>
+    <p><input type="button" style="width:300Px;height:25Px" name="gpu_info" value="Видеокарта" /></p>
+    <p><input type="button" style="width:300Px;height:25Px" name="ram_info" value="Оперативная память" /></p>
+    <p><input type="button" style="width:300Px;height:25Px" name="send_info" value="Отправить агенту" /></p>
+</form>
+<div id="printBlock"></div>
+<script>
+//file:///var/test.dev/version_3/index.html
+// получаем элемент printBlock
+var printBlock = document.getElementById("printBlock");
+websocket = new WebSocket('wss://test.eu:8080/');
+function printForm(event){
+    websocket.onmessage = function (event) {
+        data = JSON.parse(event.data);
+        switch (data.status) {
+            case 'success':
+                printBlock.innerHTML = event.data;
+                break;
+            default:
+                console.error(
+                    'unsupported event', data);
+            }
+    }
+}
+function get_os_info(event) {
+    websocket.send(JSON.stringify({'type':'get','action': 'os'}));
+    printForm()
+}
+function get_ip_info(event) {
+    websocket.send(JSON.stringify({'type':'get','action': 'ip'}));
+    printForm()
+    }
+
+function get_ip_default(event) {
+    websocket.send(JSON.stringify({'type':'get','action': 'ip_default'}));
+    printForm()
+}
+function get_route_table(event) {
+    websocket.send(JSON.stringify({'type':'get','action': 'route_table'}));
+    printForm()
+}
+function get_mac_all(event) {
+    websocket.send(JSON.stringify({'type':'get','action': 'mac_all'}));
+    printForm()
+}
+function get_mac_default(event) {
+    websocket.send(JSON.stringify({'type':'get','action': 'default_mac'}));
+    printForm()
+}
+function get_mac_nearest_gateways(event) {
+    websocket.send(JSON.stringify({'type':'get','action': 'mac_nearest_gateways'}));
+    printForm()
+}
+function get_disk_serial(event) {
+    websocket.send(JSON.stringify({'type':'get','action': 'disk_serial'}));
+    printForm()
+}
+function get_cpu(event) {
+    websocket.send(JSON.stringify({'type':'get','action': 'cpu'}));
+    printForm()
+}
+function get_motherboard(event) {
+    websocket.send(JSON.stringify({'type':'get','action': 'motherboard'}));
+    printForm()
+}
+function get_gpu(event) {
+    websocket.send(JSON.stringify({'type':'get','action': 'gpu'}));
+    printForm()
+}
+function get_ram(event) {
+    websocket.send(JSON.stringify({'type':'get','action': 'ram'}));
+    printForm()
+}
+function send_info(event) {
+    websocket.send(JSON.stringify({'type':'post'}));
+    printForm()
+}
+var print_ipaddress_all = document.get_info.ipaddress_all;
+var print_ipaddress_default = document.get_info.ipaddress_default;
+var print_route_table = document.get_info.route_table;
+var print_mac_all = document.get_info.mac_all;
+var print_mac_default = document.get_info.mac_default;
+var print_mac_nearest_gateways = document.get_info.mac_nearest_gateways;
+var print_disk_serial = document.get_info.disk_serial;
+var print_os_info = document.get_info.os_info;
+var print_cpu_info = document.get_info.cpu_info;
+var print_motherboard_info = document.get_info.motherboard_info;
+var print_gpu_info = document.get_info.gpu_info;
+var print_ram_info = document.get_info.ram_info;
+var print_send_info = document.get_info.send_info;
+
+print_ipaddress_all.addEventListener("click", get_ip_info);
+print_ipaddress_default.addEventListener("click", get_ip_default);
+print_route_table.addEventListener("click", get_route_table);
+print_mac_all.addEventListener("click", get_mac_all);
+print_mac_default.addEventListener("click", get_mac_default);
+print_mac_nearest_gateways.addEventListener("click", get_mac_nearest_gateways);
+print_disk_serial.addEventListener("click", get_disk_serial);
+print_os_info.addEventListener("click", get_os_info);
+print_cpu_info.addEventListener("click", get_cpu);
+print_motherboard_info .addEventListener("click", get_motherboard);
+print_gpu_info.addEventListener("click", get_gpu);
+print_ram_info.addEventListener("click", get_ram);
+print_send_info.addEventListener("click", send_info);
+</script>
+</body>
+</html>
